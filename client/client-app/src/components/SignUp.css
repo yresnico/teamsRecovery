@@ -7,3 +7,8 @@
 .form h2 {
     margin-bottom: 5vh;
 }
+
+.form p {
+    color: red;
+    margin-left: 1vw;
+}
