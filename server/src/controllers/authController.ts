@@ -1,117 +1,63 @@
-import { ControllerHandler } from '../types/appType';
-import { db } from '../../server';
+import { ControllerHandler } from "../types/appType";
+import { db } from "../../server";
+//Checks if username exist in database, true if username exist, otherwise false.
 
-export const loginHandler: ControllerHandler = (req, res) => {
-  if (!req.body.email || !req.body.password) {
-    res.status(400).send({ status: 'fail', message: 'Incorrect data' });
+const checkUserName: ControllerHandler = (req, res) => {
+  if (!req.body.username) {
+    res
+      .status(401)
+      .send({ status: "fail", message: "Username was not provided" });
     return;
   }
   db.query(
-    `SELECT * FROM users WHERE e_mail = ?;`,
+    "SELECT * FROM users WHERE username = ?",
+    [req.body.username],
+    (err, result) => {
+      res.status(200).send({
+        status: "succses",
+        data: !(Object.values(JSON.parse(JSON.stringify(result))).length === 0),
+      });
+    }
+  );
+};
+
+const checkEmail: ControllerHandler = (req, res) => {
+  if (!req.body.email) {
+    res.status(401).send({ status: "fail", message: "Email was not provided" });
+    return;
+  }
+  db.query(
+    "SELECT * FROM users WHERE email = ?",
     [req.body.email],
-    function (err, result) {
-      if (!err) {
-        if (result instanceof Array && result.length !== 0) {
-          // @ts-ignore
-          if (result[0].password === req.body.password) {
-            // @ts-ignore
-            req.session.user = result;
-            // @ts-ignore
-            res.status(200).send({ status: 'succses', data: req.session.user });
-            return;
-          } else {
-            res
-              .status(401)
-              .send({ status: 'fail', message: 'Incorrect password' });
-            return;
-          }
-        } else {
-          res.status(401).send({ status: 'fail', message: 'Incorrect email' });
-          return;
-        }
-      } else {
-        res.status(401).send({ status: 'fail', message: err });
-        return;
-      }
+    (err, result) => {
+      res.status(200).send({
+        status: "succses",
+        data: !(Object.values(JSON.parse(JSON.stringify(result))).length === 0),
+      });
     }
   );
 };
 
-export const loginAutomatic: ControllerHandler = (req, res) => {
-  // @ts-ignore
-  if (req.session.user) {
-    // @ts-ignore
-    res.status(200).send({ status: 'succses', data: req.session.user });
-  } else {
-    // @ts-ignore
-    res.status(401).send({ status: 'fail', message: 'Incorrect cookie' });
-  }
-};
-
-export const signUpHandler: ControllerHandler = (req, res) => {
-  if (
-    !req.body.email ||
-    !req.body.password ||
-    !req.body.first_name ||
-    !req.body.last_name
-  ) {
-    res.status(400).send({ status: 'fail', message: 'Incorrect data' });
-    return;
-  }
-
-  if (
-    req.body.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) === null ||
-    req.body.first_name.trim().length < 4 ||
-    req.body.last_name.trim().length < 4 ||
-    req.body.password.trim().length < 4
-  ) {
-    res.status(400).send({ status: 'fail', message: 'Incorrect data' });
-    return;
-  }
+const updateUser: ControllerHandler = (req, res) => {
   db.query(
-    `INSERT INTO users(first_name, last_name, e_mail, password) VALUES (?,?,?,?);`,
-    [
-      req.body.first_name,
-      req.body.last_name,
-      req.body.email,
-      req.body.password,
-    ],
-    function (err, result) {
-      if (err === null) {
-        // @ts-ignore
-        req.session.user = {
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          email: req.body.email,
-          password: req.body.password,
-          image: 'defaultUser.png',
-        };
-        // @ts-ignore
-        res.status(200).send({ status: 'succses', data: req.session.user });
-        return;
-      } else {
-        res
-          .status(401)
-          .send({ status: 'fail', message: 'Incorrect incorrect data' });
-        return;
+    "UPDATE users SET username = ?, password = ? WHERE email = ?;",
+    [req.body.username, req.body.password, req.body.email],
+    (err, result) => {
+      if (err) {
+        res.status(401).send({ status: "fail", message: err });
       }
+      res.status(200).send({
+        status: "succses",
+        data: !(Object.values(JSON.parse(JSON.stringify(result))).length === 0),
+      });
     }
   );
-};
-
-export const logout: ControllerHandler = (req, res) => {
-  // @ts-ignore
-  req.session.user = null;
-  res.clearCookie('session-id', { sameSite: 'none', secure: true });
-  res.status(200).send({ status: 'succses' });
 };
 
 const authController = {
-  loginHandler,
-  loginAutomatic,
-  signUpHandler,
-  logout,
+  checkUserName,
+  checkEmail,
+  updateUser,
 };
 
 export default authController;
-
