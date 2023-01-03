@@ -5,8 +5,12 @@ function OrderModal(props) {
     const [items, setItems] = useState(0);
 
     function getDisplayDate() {
+        const monthMap = new Map([
+            [0, 'January'],[1, 'February'], [2, 'March'], [3, 'April'], [4, 'May'], [5, 'June'], [6, 'July'], [7, 'August'],
+            [8, 'September'], [9, 'October'], [10, 'November'], [12, 'December']
+        ])
         const today = new Date();
-        return `${today.getMonth() + 1} ${today.getDate()}, ${today.getFullYear()}`
+        return `${monthMap.get(today.getMonth())} ${today.getDate()}, ${today.getFullYear()}`
     }
 
     function handleChangeItems(e) {
@@ -37,14 +41,16 @@ function OrderModal(props) {
             })
         props.setMaking(false);
     }
-
+    function handleClose() {
+        props.setMaking(false);
+    }
     if(props.making) {
         return (
-            <div className="order-modal-form">
-                <div className="order-modal-content">
+            <div className="order-modal-form" style={{zIndex: '3'}} onClick={handleClose}>
+                <div className="order-modal-content" onClick={e => {e.stopPropagation()}}>
                     <div className="order-modal-title"><h2>New Order</h2></div>
 
-                    <div className="item-num">
+                    <div className="item-num mt-5">
                         <label htmlFor="itemNum">Total Items</label>
                         <input 
                             type="number" 
@@ -57,10 +63,10 @@ function OrderModal(props) {
                     <div className="total-price">
                         <output>Subtotal: {(items * 2.78).toLocaleString()}</output>
                     </div>
-                    <div className="date">
+                    <div className="date mb-5">
                         <output>Date: {getDisplayDate()}</output>
                     </div>
-                    <div>
+                    <div className="mb-2">
                         <button type="button" onClick={() => makeOrder()}>Place Order</button>
                     </div>
                 </div>
