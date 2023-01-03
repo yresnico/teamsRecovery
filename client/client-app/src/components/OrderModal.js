@@ -46,7 +46,7 @@ function OrderModal(props) {
     }
     if(props.making) {
         return (
-            <div className="order-modal-form" onClick={handleClose}>
+            <div className="order-modal-form" style={{zIndex: '3'}} onClick={handleClose}>
                 <div className="order-modal-content" onClick={e => {e.stopPropagation()}}>
                     <div className="order-modal-title"><h2>New Order</h2></div>
 
