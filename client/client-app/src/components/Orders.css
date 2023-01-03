@@ -1,0 +1,12 @@
+.orders-container {
+    text-align: center;
+    margin:auto;
+}
+.orders-table{
+    
+    margin:auto;
+    border-collapse: collapse;
+}
+.orders-table th, .orders-table td {
+    border: 1px solid black;
+}
