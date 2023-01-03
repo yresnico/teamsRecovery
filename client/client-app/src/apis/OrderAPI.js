@@ -9,11 +9,11 @@ class OrderAPI{
     }
 
     getFilteredOrders(id) {
-        return axios.get(this.destination + `getorders?filter=${id}`, {withCredentials: true});
+        return axios.get(this.destination + `searchorders?filter=${id}`, {withCredentials: true});
     }
 
     makeOrder(quantity) {
-        return axios.post(this.destination + `addorder`, {quantity}, {withCredentials: true})
+        return axios.post(this.destination + `userorders`, {quantity}, {withCredentials: true})
     }
 }
 export default OrderAPI;
