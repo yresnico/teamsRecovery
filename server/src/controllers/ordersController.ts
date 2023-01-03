@@ -3,14 +3,13 @@ import { ControllerHandler } from '../types/appType';
 import { db } from '../../server';
 
 export const getUserOrders: ControllerHandler = (req: Request, res: Response) => {
-    console.log(req.session);
     db.query(
         `SELECT * FROM orders WHERE userID = ?;`,
-        [req.body.userID],
+        [req.body.userid],
         function (err, result) {
             if (!err) {
                 if (result instanceof Array && result.length !== 0) {
-                    req.body.orders = result;
+                    res.status(200).send(result)
                 } else {
                     res.status(401).send({ status: 'fail', message: 'User has no orders' });
                     return;
@@ -19,6 +18,8 @@ export const getUserOrders: ControllerHandler = (req: Request, res: Response) =>
                 res.status(401).send({ status: 'fail', message: err });
                 return;
             }
+
+
         }
     );
 };
@@ -39,12 +40,14 @@ export const setUserOrders: ControllerHandler = (req: Request, res: Response) =>
 }
 
 export const searchUserOrders: ControllerHandler = (req: Request, res: Response) => {
+
+    const queryData = `%${req.params.id}%`
     db.query(
-        `SELECT * FROM orders WHERE id LIKE %?%`,
-        [req.body.id],
+        `SELECT * FROM orders WHERE id LIKE ?`,
+        [queryData],
         function (err, result) {
             if (!err) {
-                req.body.result = result;
+                res.status(200).send(result)
             }
             else {
                 res.status(401).send({ status: 'fail', message: err });

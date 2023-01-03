@@ -5,7 +5,7 @@ import { db } from "../../server";
 const checkUserName: ControllerHandler = (req, res) => {
   if (!req.body.username) {
     res
-      .status(401)
+      .status(402)
       .send({ status: "fail", message: "Username was not provided" });
     return;
   }
@@ -23,7 +23,7 @@ const checkUserName: ControllerHandler = (req, res) => {
 
 const checkEmail: ControllerHandler = (req, res) => {
   if (!req.body.email) {
-    res.status(401).send({ status: "fail", message: "Email was not provided" });
+    res.status(402).send({ status: "fail", message: "Email was not provided" });
     return;
   }
   db.query(
@@ -43,13 +43,18 @@ const updateUser: ControllerHandler = (req, res) => {
     "UPDATE users SET username = ?, password = ? WHERE email = ?;",
     [req.body.username, req.body.password, req.body.email],
     (err, result) => {
-      if (err) {
-        res.status(401).send({ status: "fail", message: err });
+      //@ts-ignore
+      if (result.changedRows === 0) {
+        res.status(402).send({ status: "fail", message: 'incorrect data' });
+        return
       }
-      res.status(200).send({
-        status: "succses",
-        data: !(Object.values(JSON.parse(JSON.stringify(result))).length === 0),
-      });
+      db.query("SELECT * FROM users WHERE email = ?", [req.body.email], (err, result) => {
+        res.status(200).send({
+          status: "succses",
+          data: result,
+        });
+      })
+
     }
   );
 };
