@@ -4,7 +4,7 @@ import mysql from "mysql";
 
 dotenv.config({ path: `${__dirname}/env/.env.local` });
 
-const connection = mysql.createConnection({
+export const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
   
 });
 
-connection.connect((err) => {
+db.connect((err) => {
   if (err) {
     console.log(`Connection with DB not succesful. Error: ${err}`);
   } else {
