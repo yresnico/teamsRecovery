@@ -1,0 +1,21 @@
+.home {
+    display: grid;
+    justify-content: center;
+    border: 3px solid grey;
+    width: 50vw;
+    height: 50vh;
+    margin: auto;
+    margin-top: 25vh;
+    box-sizing: border-box;
+}
+
+.home h1 {
+    color: grey;
+    margin-top: 35%;
+    margin-left: 2vw;
+}
+
+.spinner {
+    margin: auto;
+    margin-bottom: 30%;
+}
