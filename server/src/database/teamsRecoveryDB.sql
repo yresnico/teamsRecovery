@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `recoveryteams` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `recoveryteams`;
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: recoveryteams
@@ -28,7 +26,7 @@ CREATE TABLE `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userID` int DEFAULT NULL,
   `quantity` int DEFAULT NULL,
-  `data` varchar(100) DEFAULT (_utf8mb4'some data'),
+  `date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `userID` (`userID`),
@@ -42,7 +40,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,1,12,'Potatos'),(2,1,3,'Orange'),(3,1,5,'Cucumber'),(4,2,10,'Potatos'),(5,2,3,'Carot'),(6,3,2,'Cake'),(7,4,20,'Chips'),(8,4,5,'Cola');
+INSERT INTO `orders` VALUES (1,1,12,'2023-01-03 15:45:34'),(2,1,3,'2023-01-03 15:45:34'),(3,1,5,'2023-01-03 15:45:34'),(4,2,10,'2023-01-03 15:45:34'),(5,2,3,'2023-01-03 15:45:34'),(6,3,2,'2023-01-03 15:45:34'),(7,4,20,'2023-01-03 15:45:34'),(8,4,5,'2023-01-03 15:45:34');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,4 +81,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-03 11:53:48
+-- Dump completed on 2023-01-03 15:46:20

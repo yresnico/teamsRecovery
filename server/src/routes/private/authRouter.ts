@@ -1,13 +1,11 @@
 import express from 'express';
-
-import { loginAutomatic, loginHandler, logout, signUpHandler } from '../../controllers/authController';
+import authController from '../../controllers/authController';
 
 const authRouter = express.Router({mergeParams: true});
 
-authRouter.route('/login').post(loginHandler).get(loginAutomatic);
-authRouter.route('/signup').post(signUpHandler);
-authRouter.route('/logout').get(logout);
+authRouter.route('/username').get(authController.checkUserName)
+authRouter.route('/email').get(authController.checkEmail)
+authRouter.route('/login').post()
 
-// console.log(authRouter.stack);
 
 export default authRouter;
