@@ -4,6 +4,7 @@ import OrderModal from './OrderModal';
 import {Row} from 'react-bootstrap';
 import './Orders.css';
 import Order from './Order';
+import OrderSearch from './OrderSeach';
 function Orders(props) {
     const [orderList, setOrderList] = useState([])
     const [loading, setLoading] = useState(false)
@@ -14,7 +15,16 @@ function Orders(props) {
     const [totalPrices, setTotalPrices] = useState(0)
 
     function handleSearchIDChange(e){
-        setSearchID(e.target.value)
+        setSearchID(e)
+        console.log(`searched for`, e);
+        const orderAPI = new OrderAPI();
+        orderAPI.getFilteredOrders(e)
+        .then(res => {
+            setOrderList(res.data)
+        })
+        .catch(err => {
+            console.log('Error filtering orders', err)
+        })
     }
 
     // useEffect(() => {
@@ -61,7 +71,8 @@ function Orders(props) {
             <h1>Orders</h1>
             <Row className='mb-5 justify-content-between'>
                 <div className='order-search col-sm-6'>
-                    <input type="text" id="orderID" value={searchID} onChange={handleSearchIDChange} placeholder="Search by ID" />
+                    {/* <input type="text" id="orderID" value={searchID} onChange={handleSearchIDChange} placeholder="Search by ID" /> */}
+                    <OrderSearch onChange={handleSearchIDChange} />
                 </div>
                 <div className='col-sm-6'>
                     <OrderModal making={ordering} setParentItems={setOrderList} setMaking={setOrdering} title="New Order +" />
