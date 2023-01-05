@@ -1,5 +1,5 @@
 import { ControllerHandler } from "../types/appType";
-import { db } from "../../server";
+import { db } from "../database/api";
 //Checks if username exist in database, true if username exist, otherwise false.
 
 const checkUserName: ControllerHandler = (req, res) => {
@@ -54,7 +54,6 @@ const updateUser: ControllerHandler = (req, res) => {
           data: result,
         });
       })
-
     }
   );
 };
