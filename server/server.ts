@@ -3,7 +3,6 @@ import app from "./app";
 
 dotenv.config({ path: `${__dirname}/src/env/.env` });
 
-
 const PORT = process.env.PORT || 3100;
 
 app.listen(PORT, () => {
